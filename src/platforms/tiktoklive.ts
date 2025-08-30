@@ -21,6 +21,9 @@ async function createLive(tiktokUsername: string): Promise<TikTokLiveConnection>
             roomId: state.roomId,
             state
         })
+        connection.on(WebcastEvent.STREAM_END, () => {
+            disconnectLive(tiktokUsername)
+        })
         TiktokEventsArray.forEach(event => {
             connection.on(event as WebcastEvent, (data: any) => {
                 emitter.emit('tiktok:event', {
