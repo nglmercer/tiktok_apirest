@@ -49,19 +49,25 @@ io.on('connection', (socket) => {
     console.log("live:tiktok", tiktokUsername)
     await TiktokFunctions.createLiveIfNotExist(tiktokUsername);
     TiktokFunctions.getLive(tiktokUsername);
+    const subData =(data: any) => {
+      const existData = data.data ? data.data : data
+      console.log("keys", Object.keys(existData))
+      return data
+    }
     emitter.on('tiktok:connected', (data) => {
       if(data.tiktokUsername === tiktokUsername){
-        socket.emit('tiktok:connected', data)
+        socket.emit('tiktok:connected', subData(data))
       }
     })
     emitter.on('tiktok:event', (data) => {
       if(data.tiktokUsername === tiktokUsername){
-        socket.emit('tiktok:event', data)
+        console.log("event",data.event,subData(data).event)
+        socket.emit(subData(data).event,  subData(data)) 
       }
     })
     emitter.on('tiktok:disconnected', (data) => {
       if(data.tiktokUsername === tiktokUsername){
-        socket.emit('tiktok:disconnected', data)
+        socket.emit('tiktok:disconnected',  subData(data))
       }
     })
   })

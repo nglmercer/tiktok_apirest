@@ -26,6 +26,7 @@ async function createLive(tiktokUsername: string): Promise<TikTokLiveConnection>
                 emitter.emit('tiktok:event', {
                     tiktokUsername,
                     event,
+                    eventType: event,
                     data
                 })
             })
